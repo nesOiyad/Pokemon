@@ -13,12 +13,10 @@ public class EnemyAI : MonoBehaviour
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange;
-
-    public float timeBetweenAttack;
-    bool alreadyAttacked;
-
-    public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange;
+    
+    public int damage;
+    public float sightRange;
+    public bool playerInSightRange;
 
     private void Awake()
     {
@@ -30,15 +28,12 @@ public class EnemyAI : MonoBehaviour
     private void Update()
     {
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, isPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, isPlayer);
 
-        if (!playerInAttackRange && !playerInSightRange)
+        if (playerInSightRange)
         {
-            Patrolling();
-        }
-        if (playerInSightRange && !playerInAttackRange)
-        {
-            Chase();
+            Chase();// chase player if in sight
+        }else{
+            Patrolling();// Patroll if not in sigth
         }
     }
 
@@ -47,15 +42,15 @@ public class EnemyAI : MonoBehaviour
         if(!walkPointSet)
         {
             SearchWalkPoint();
-            if (walkPointSet)
-            {
-                agent.SetDestination(walkPoint);
-            }
-            Vector3 distanceToWalkPoint = transform.position -walkPoint;
-            if (distanceToWalkPoint.magnitude < 0f)
-            {
-                walkPointSet = false;
-            }
+        }
+        if (walkPointSet)
+        {
+            agent.SetDestination(walkPoint);
+        }
+        Vector3 distanceToWalkPoint = transform.position -walkPoint;
+        if (distanceToWalkPoint.magnitude < 1f)
+        {
+            walkPointSet = false;
         }
     }
 
@@ -66,7 +61,7 @@ public class EnemyAI : MonoBehaviour
         // For it to go a random direction
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);//setting that direction
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, isGround))
+        if (Physics.Raycast(walkPoint, Vector3.down, isGround))
         {
             walkPointSet = true;
         }
@@ -75,7 +70,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Chase()
     {
-        agent.SetDestination(player.position);
+        agent.SetDestination(player.position);// Go towards the player
     }
 
     private void OnTriggerEnter(Collider other)
@@ -83,7 +78,7 @@ public class EnemyAI : MonoBehaviour
         var playerMov = other.GetComponent<PlayerMotor>();
         if(playerMov != null)
         {
-            GameManager.EndGame();
+            playerMov.TakeDamage(damage);
         }
     }
 }
