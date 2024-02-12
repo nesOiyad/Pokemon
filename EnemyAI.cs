@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public NavMeshAgent agent;
-    public Transform player;
+    public GameObject player;
     public LayerMask isGround, isPlayer;
     BoxCollider boxCollider;
     
@@ -70,7 +70,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Chase()
     {
-        agent.SetDestination(player.position);// Go towards the player
+        agent.SetDestination(player.transform.position);// Go towards the player
     }
 
     private void OnTriggerEnter(Collider other)
