@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyAI : MonoBehaviour
+public class Objective : MonoBehaviour
 {
     public NavMeshAgent agent;
     public GameObject player;
@@ -20,7 +20,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("player")
+        player = GameObject.Find("player");
         agent = GetComponent<NavMeshAgent>();
         boxCollider = GetComponentInChildren<BoxCollider>();
     }
@@ -70,8 +70,8 @@ public class EnemyAI : MonoBehaviour
 
     private void Escape()
     {
-        Vector3 fleeVector = -1*(location - this.transform.position);//Flee behavior
-        agent.SetDestination(this.transform.position + fleeVector)//Escape the player
+        Vector3 fleeVector = -1*(player.transform.position - this.transform.position);//Flee behavior
+        agent.SetDestination(this.transform.position + fleeVector);//Escape the player
     }
 
     private void OnTriggerEnter(Collider other)
@@ -79,7 +79,7 @@ public class EnemyAI : MonoBehaviour
         var playerMov = other.GetComponent<PlayerMotor>();
         if(playerMov != null)
         {
-            Debug.Log("Catch")
+            Debug.Log("Catch");
         }
     }
 }
