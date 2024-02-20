@@ -44,6 +44,11 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        var jack = other.GetComponent<Jack>();
+        if (jack != null)
+        {
+            jack.GetCaptured();
+        }
         transform.position = startPoint.position;
         fired = false;
     }
