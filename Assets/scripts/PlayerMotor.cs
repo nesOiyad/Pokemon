@@ -9,6 +9,7 @@ public class PlayerMotor : MonoBehaviour
     private bool isGrounded;
     public float speed = 5f;
     public float gravity = -9.8f;
+    public int health = 1;
     
     void Start()
     {
@@ -20,6 +21,10 @@ public class PlayerMotor : MonoBehaviour
     void Update()
     {
         isGrounded = controller.isGrounded;
+        if(health<= 0)
+        {
+            Debug.Log("31");
+        }
         
     }
     public void ProcessMove(Vector2 input)
@@ -35,5 +40,9 @@ public class PlayerMotor : MonoBehaviour
         controller.Move(playerVelocity * Time.deltaTime);
 
 
+    }
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
     }
 }
